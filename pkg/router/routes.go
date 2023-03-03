@@ -93,3 +93,11 @@ func DownloadGetHandler(favFile *model.FavFile) func(c *fiber.Ctx) error {
 		return c.SendFile(favFile.GetFilePath())
 	}
 }
+
+func ExitGetHandler() func(c *fiber.Ctx) error {
+	return func(c *fiber.Ctx) error {
+		// exit the program
+		os.Exit(0)
+		return nil
+	}
+}

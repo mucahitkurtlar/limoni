@@ -83,6 +83,11 @@ a {
     font-size: 2em;
 }
 
+.exit {
+    margin-top: 1rem;
+    margin-right: 2rem;
+}
+
 .subtitle {
     font-size: .5em;
 }
