@@ -35,6 +35,7 @@ func main() {
 	app.Get("/entry", router.EntryGetHandler(store, favCollector))
 	app.Post("/entry", router.EntryPostHandler(favCollector, favFile))
 	app.Get("/download", router.DownloadGetHandler(favFile))
+	app.Get("/exit", router.ExitGetHandler())
 
 	utils.OpenInBrowser(fmt.Sprintf("http://localhost:%v", config.Port))
 	log.Fatal(app.Listen(fmt.Sprintf(":%v", config.Port)))
