@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="/static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>limoni</title>
+</head>
+
+<body>
+    {{template "header" .}}
+    <div class="container col center">
+        <div class="entry col">
+            <div class="entry-title row start gray-text">
+                {{.title}}
+            </div>
+            <div class="entry-content gray-text">
+                {{.content}}
+            </div>
+            <div class="favs row start">
+                <div class="fav-icon col center">
+                    <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" class="eksico"
+                        width="14" height="19">
+                        <defs>
+                            <symbol id="eksico-drop" viewBox="0 0 14 19">
+                                <path
+                                    d="M6.71981 17.3999C3.55072 17.3999 1 14.8492 1 11.6801C1 8.58831 6.71981 1.3999 6.71981 1.3999C6.71981 1.3999 12.4396 8.58831 12.4396 11.6801C12.4396 14.8492 9.88889 17.3999 6.71981 17.3999ZM6.71981 17.3999C6.7971 17.3999 6.7971 17.3999 6.71981 17.3999Z"
+                                    stroke-width="1.3px"></path>
+                            </symbol>
+                        </defs>
+                        <use xlink:href="#eksico-drop" fill="#BDBDBD"></use>
+                    </svg>
+                </div>
+                <div class="fav-count gray-text">{{.favoriteCount}}</div>
+            </div>
+            <div class="author row end green-text">{{.author}}</div>
+            <div class="date row end pale-text"><a href="{{.url}}">{{.date}}</a></div>
+        </div>
+        <div class="actions">
+            <form method="post">
+                <input type="submit" class="negative-btn" name="action" value="boşver">
+                <input type="submit" class="positive-btn" name="action" value="arşivle">
+                <input type="submit" class="neutral-btn" name="action" value="bitir">
+            </form>
+        </div>
+    </div>
+    {{template "footer" .}}
+</body>
+
+</html>
