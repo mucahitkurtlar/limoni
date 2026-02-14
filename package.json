@@ -1,6 +1,6 @@
 {
   "name": "limoni",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A browser extension for archiving eksi sozluk (eksisozluk.com) data",
   "type": "module",
   "scripts": {
