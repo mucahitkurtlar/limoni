@@ -1,6 +1,6 @@
-# ![Limoni Logo](icons/limoni-32.svg) Limoni - Ekşi Sözlük entry koleksiyonları
+# ![limoni Logo](icons/limoni-32.svg) limoni - Ekşi Sözlük entry koleksiyonları
 
-Limoni, Ekşi Sözlük entry koleksiyonları oluşturmanıza ve yönetmenize olanak tanıyan bir tarayıcı uzantısıdır. Entry'leri koleksiyonlara ekleyebilir, koleksiyonları düzenleyebilir ve dışa aktarabilirsiniz.
+limoni, Ekşi Sözlük entry koleksiyonları oluşturmanıza ve yönetmenize olanak tanıyan bir tarayıcı uzantısıdır. Entry'leri koleksiyonlara ekleyebilir, koleksiyonları düzenleyebilir ve dışa aktarabilirsiniz.
 
 ## Özellikler
 
@@ -11,7 +11,7 @@ Limoni, Ekşi Sözlük entry koleksiyonları oluşturmanıza ve yönetmenize ola
 
 ## Başlarken
 
-Adımları takip ederek Limoni'yi geliştirme ortamınızda çalıştırabilirsiniz.
+Adımları takip ederek limoni'yi geliştirme ortamınızda çalıştırabilirsiniz.
 
 ### Gereksinimler
 
@@ -49,7 +49,7 @@ bun run build
 
 ### Koleksiyon Oluşturma
 
-1. Firefox araç çubuğundaki ![Limoni simgesi](icons/limoni-16.svg) simgesine tıklayın
+1. Firefox araç çubuğundaki ![limoni simgesi](icons/limoni-16.svg) simgesine tıklayın
 2. "Yeni" butonuna tıklayarak yeni bir koleksiyon oluşturun
 3. Koleksiyonunuza bir isim ve isteğe bağlı olarak bir açıklama verin
 4. "Oluştur" butonuna tıklayın

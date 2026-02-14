@@ -86,8 +86,8 @@ browser.runtime.onInstalled.addListener(async (details) => {
       defaultCollectionId: defaultCollection.id,
     });
 
-    console.log("Limoni extension installed successfully!");
+    console.log("limoni extension installed successfully!");
   }
 });
 
-console.log("Limoni background script loaded");
+console.log("limoni background script loaded");
