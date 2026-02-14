@@ -4,6 +4,7 @@ import type {
   Message,
   AddEntryPayload,
   CreateCollectionPayload,
+  UpdateCollectionPayload,
   Entry,
   Settings,
 } from "../types";
@@ -27,6 +28,15 @@ browser.runtime.onMessage.addListener(async (message: unknown) => {
       case "CREATE_COLLECTION": {
         const payload = msg.payload as CreateCollectionPayload;
         const collection = await storage.createCollection(
+          payload.name,
+          payload.description
+        );
+        return { success: true, collection };
+      }
+      case "UPDATE_COLLECTION": {
+        const payload = msg.payload as UpdateCollectionPayload;
+        const collection = await storage.updateCollection(
+          payload.collectionId,
           payload.name,
           payload.description
         );

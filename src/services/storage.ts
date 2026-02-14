@@ -61,6 +61,30 @@ export class StorageService {
     return newCollection;
   }
 
+  async updateCollection(
+    collectionId: string,
+    name?: string,
+    description?: string
+  ): Promise<Collection> {
+    const data = await this.getData();
+    const collection = data.collections.find((c) => c.id === collectionId);
+
+    if (!collection) {
+      throw new Error("Collection not found");
+    }
+
+    if (name !== undefined) {
+      collection.name = name;
+    }
+    if (description !== undefined) {
+      collection.description = description;
+    }
+    collection.updatedAt = Date.now();
+
+    await this.saveData(data);
+    return collection;
+  }
+
   async addEntry(entry: Entry, collectionId?: string): Promise<void> {
     const data = await this.getData();
 
