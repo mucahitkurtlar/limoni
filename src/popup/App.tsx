@@ -175,7 +175,26 @@ export function App() {
       };
 
       (await browser.runtime.sendMessage(message)) as GenericMessageResponse;
-      await loadCollections();
+
+      const collectionsMessage: Message = {
+        type: "GET_COLLECTIONS",
+        payload: {},
+      };
+      const collectionsResponse = (await browser.runtime.sendMessage(
+        collectionsMessage
+      )) as CollectionMessageResponse;
+
+      if (collectionsResponse.success) {
+        setCollections(collectionsResponse.collections || []);
+        if (selectedCollection) {
+          const updatedCollection = collectionsResponse.collections?.find(
+            (c) => c.id === selectedCollection.id
+          );
+          if (updatedCollection) {
+            setSelectedCollection(updatedCollection);
+          }
+        }
+      }
     } catch (error) {
       console.error("Error deleting entry:", error);
     }
