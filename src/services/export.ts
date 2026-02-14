@@ -28,22 +28,22 @@ export class ExportService {
 
   private exportAsCSV(collection: Collection): void {
     const headers = [
-      "ID",
+      "Topic",
+      "Content",
       "Author",
       "Date",
-      "Content",
       "Favorites",
-      "Topic",
-      "URL",
+      "Topic URL",
+      "Entry URL",
     ];
     const rows = collection.entries.map((entry) => [
-      entry.id,
+      entry.topicTitle || "",
+      this.stripHTML(entry.content),
       entry.author,
       entry.date,
-      this.stripHTML(entry.content),
       entry.favoriteCount.toString(),
-      entry.topicTitle || "",
       entry.topicUrl || "",
+      `https://eksisozluk.com/entry/${entry.id}`,
     ]);
 
     const csvContent = [
