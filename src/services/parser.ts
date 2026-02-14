@@ -1,3 +1,4 @@
+import DOMPurify from "dompurify";
 import type { Entry } from "../types";
 
 export class ParserService {
@@ -18,7 +19,11 @@ export class ParserService {
         return null;
       }
 
-      const contentHtml = contentElement.innerHTML.trim();
+      const rawHtml = contentElement.innerHTML.trim();
+      const contentHtml = DOMPurify.sanitize(rawHtml, {
+        ALLOWED_TAGS: ["a", "br", "strong", "em", "b", "i", "u", "p", "span"],
+        ALLOWED_ATTR: ["href", "target", "rel", "class"],
+      });
       const content = contentElement.textContent?.trim() || "";
 
       const dateElement = element.querySelector(".entry-date");
