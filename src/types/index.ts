@@ -36,6 +36,7 @@ export type MessageType =
   | "ADD_ENTRY"
   | "GET_COLLECTIONS"
   | "CREATE_COLLECTION"
+  | "UPDATE_COLLECTION"
   | "DELETE_ENTRY"
   | "DELETE_COLLECTION"
   | "EXPORT_COLLECTION"
@@ -54,6 +55,12 @@ export interface AddEntryPayload {
 
 export interface CreateCollectionPayload {
   name: string;
+  description?: string;
+}
+
+export interface UpdateCollectionPayload {
+  collectionId: string;
+  name?: string;
   description?: string;
 }
 

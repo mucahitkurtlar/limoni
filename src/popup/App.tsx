@@ -15,11 +15,13 @@ import {
   Droplet,
   Download,
   ChevronDown,
+  Edit,
 } from "lucide-react";
 import type {
   Collection,
   Message,
   CreateCollectionPayload,
+  UpdateCollectionPayload,
   ExportFormat,
   Settings as SettingsType,
   CollectionMessageResponse,
@@ -36,6 +38,9 @@ export function App() {
   const [isCreating, setIsCreating] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState("");
   const [newCollectionDesc, setNewCollectionDesc] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [editCollectionName, setEditCollectionName] = useState("");
+  const [editCollectionDesc, setEditCollectionDesc] = useState("");
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState<SettingsType | null>(null);
   const [showExportMenu, setShowExportMenu] = useState(false);
@@ -109,6 +114,52 @@ export function App() {
       }
     } catch (error) {
       console.error("Error creating collection:", error);
+    }
+  };
+
+  const handleUpdateCollection = async () => {
+    if (!editCollectionName.trim() || !selectedCollection) {
+      return;
+    }
+
+    try {
+      const message: Message<UpdateCollectionPayload> = {
+        type: "UPDATE_COLLECTION",
+        payload: {
+          collectionId: selectedCollection.id,
+          name: editCollectionName.trim(),
+          description: editCollectionDesc.trim() || undefined,
+        },
+      };
+
+      const response = (await browser.runtime.sendMessage(
+        message
+      )) as GenericMessageResponse;
+      if (response.success) {
+        setEditCollectionName("");
+        setEditCollectionDesc("");
+        setIsEditing(false);
+
+        const collectionsMessage: Message = {
+          type: "GET_COLLECTIONS",
+          payload: {},
+        };
+        const collectionsResponse = (await browser.runtime.sendMessage(
+          collectionsMessage
+        )) as CollectionMessageResponse;
+
+        if (collectionsResponse.success) {
+          setCollections(collectionsResponse.collections || []);
+          const updatedCollection = collectionsResponse.collections?.find(
+            (c) => c.id === selectedCollection.id
+          );
+          if (updatedCollection) {
+            setSelectedCollection(updatedCollection);
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error updating collection:", error);
     }
   };
 
@@ -260,7 +311,60 @@ export function App() {
 
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto">
-          {isCreating ? (
+          {isEditing ? (
+            <div className="p-6">
+              <h2 className="text-lg font-bold text-limoni-black mb-4 flex items-center gap-2">
+                <Edit className="w-5 h-5" />
+                Koleksiyonu Düzenle
+              </h2>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Koleksiyon adı*
+                  </label>
+                  <input
+                    type="text"
+                    value={editCollectionName}
+                    onChange={(e) => setEditCollectionName(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-limoni-primary"
+                    placeholder="Örn: Favori Entry'lerim"
+                    autoFocus
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Açıklama
+                  </label>
+                  <textarea
+                    value={editCollectionDesc}
+                    onChange={(e) => setEditCollectionDesc(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-limoni-primary"
+                    rows={3}
+                    placeholder="Koleksiyon hakkında kısa açıklama..."
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleUpdateCollection}
+                    disabled={!editCollectionName.trim()}
+                    className="flex-1 bg-limoni-primary text-white px-4 py-2 rounded-sm text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  >
+                    Güncelle
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsEditing(false);
+                      setEditCollectionName("");
+                      setEditCollectionDesc("");
+                    }}
+                    className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-sm text-sm font-medium hover:bg-gray-300 transition"
+                  >
+                    İptal
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : isCreating ? (
             <div className="p-6">
               <h2 className="text-lg font-bold text-limoni-black mb-4 flex items-center gap-2">
                 <FolderPlus className="w-5 h-5" />
@@ -349,6 +453,19 @@ export function App() {
                         varsayılan yap
                       </button>
                     )}
+                    <button
+                      onClick={() => {
+                        setEditCollectionName(selectedCollection.name);
+                        setEditCollectionDesc(
+                          selectedCollection.description || ""
+                        );
+                        setIsEditing(true);
+                      }}
+                      className="text-blue-600 hover:text-blue-800 p-1"
+                      title="Koleksiyonu düzenle"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
                     <button
                       onClick={() =>
                         handleDeleteCollection(selectedCollection.id)

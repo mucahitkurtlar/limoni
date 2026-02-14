@@ -77,7 +77,7 @@ bun run build
 
 - [ ] Entry'leri koleksiyonlardan kaldırınca UI güncellenmiyor
 - [ ] Yeni oluşturulan koleksiyonların açılır menüde görünmesi için sayfa yenilemek gerekiyor
-- [ ] Koleksiyon isim ve açıklamalarını düzenleme
+- [x] Koleksiyon isim ve açıklamalarını düzenleme
 - [ ] Karanlık tema desteği
 
 ## Lisans
