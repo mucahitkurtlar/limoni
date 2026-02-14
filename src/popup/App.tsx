@@ -194,7 +194,7 @@ export function App() {
       <header className="text-white p-4 border-b border-limoni-border">
         <div className="flex items-center gap-2">
           <div>
-            <h1 className="text-xl text-limoni-primary font-bold">Limoni</h1>
+            <h1 className="text-xl text-limoni-primary font-bold">limoni</h1>
             <p className="text-sm text-limoni-black">
               Ekşi Sözlük entry koleksiyoncusu
             </p>

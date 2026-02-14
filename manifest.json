@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Limoni - Ekşi Sözlük entry koleksiyonları",
+  "name": "limoni - Ekşi Sözlük entry koleksiyonları",
   "version": "0.1.0",
-  "description": "Limoni, Ekşi Sözlük entry koleksiyonları oluşturmanıza ve yönetmenize olanak tanıyan bir tarayıcı uzantısıdır. Entry'leri koleksiyonlara ekleyebilir, koleksiyonları düzenleyebilir ve dışa aktarabilirsiniz.",
+  "description": "limoni, Ekşi Sözlük entry koleksiyonları oluşturmanıza ve yönetmenize olanak tanıyan bir tarayıcı uzantısıdır. Entry'leri koleksiyonlara ekleyebilir, koleksiyonları düzenleyebilir ve dışa aktarabilirsiniz.",
   "homepage_url": "https://github.com/mucahitkurtlar/limoni",
   "developer": {
     "name": "Mücahit Kurtlar",
@@ -20,7 +20,7 @@
     "default_icon": {
       "48": "icons/limoni-48.svg"
     },
-    "default_title": "Limoni - Ekşi Sözlük entry koleksiyonları",
+    "default_title": "limoni - Ekşi Sözlük entry koleksiyonları",
     "default_popup": "popup/index.html"
   },
   "background": {

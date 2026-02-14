@@ -90,7 +90,7 @@ export class ExportService {
     </main>
     
     <footer>
-      <p><a href="http://github.com/mucahitkurtlar/limoni" target="blank_">Limoni</a> ile dışa aktarıldı - Ekşi Sözlük entry koleksiyoncusu</p>
+      <p><a href="http://github.com/mucahitkurtlar/limoni" target="blank_">limoni</a> ile dışa aktarıldı - Ekşi Sözlük entry koleksiyoncusu</p>
       <p>${new Date().toLocaleString("tr-TR")}</p>
     </footer>
   </div>
