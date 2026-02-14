@@ -266,7 +266,7 @@ export function App() {
           <div>
             <h1 className="text-xl text-limoni-primary font-bold">limoni</h1>
             <p className="text-sm text-limoni-black">
-              Ekşi Sözlük entry koleksiyoncusu
+              Ekşi Sözlük entry koleksiyonları
             </p>
           </div>
         </div>
