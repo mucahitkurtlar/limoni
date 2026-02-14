@@ -1,3 +1,4 @@
+import DOMPurify from "dompurify";
 import type { Collection, Entry, ExportFormat } from "../types";
 
 export class ExportService {
@@ -108,7 +109,7 @@ export class ExportService {
       </div>`
           : ""
       }
-      <div class="entry-content">${entry.contentHtml}</div>
+      <div class="entry-content">${DOMPurify.sanitize(entry.contentHtml)}</div>
       <div class="entry-footer">
         <div class="footer-left">
           <span class="favorites"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-droplet-icon lucide-droplet"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg> ${entry.favoriteCount}</span>

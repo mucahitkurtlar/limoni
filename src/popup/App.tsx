@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import browser from "webextension-polyfill";
+import DOMPurify from "dompurify";
 import {
   FolderPlus,
   Folder,
@@ -600,7 +601,9 @@ export function App() {
                       {/* Entry Content */}
                       <div
                         className="text-sm text-limoni-black mb-3 leading-relaxed"
-                        dangerouslySetInnerHTML={{ __html: entry.contentHtml }}
+                        dangerouslySetInnerHTML={{
+                          __html: DOMPurify.sanitize(entry.contentHtml),
+                        }}
                       />
 
                       {/* Footer */}
