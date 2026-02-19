@@ -5,9 +5,23 @@
   --color-limoni-btn-text: #333333;
   --color-limoni-btn-hover: #424242;
   --color-limoni-success: #81c14b;
+  --color-limoni-error: #ea4335;
   --color-limoni-dropdown-bg: #2d2d2d;
   --color-limoni-dropdown-border: #b0bec5;
   --color-limoni-dropdown-item: #333333;
   --color-limoni-dropdown-hover: #f6f7f7;
   --color-limoni-default: #81c14b;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
