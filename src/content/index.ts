@@ -67,15 +67,14 @@ function injectAddButtons(): void {
     buttonGroup.setAttribute("data-entry-id", entryId);
 
     const addButton = document.createElement("button");
-    addButton.className = `${ADD_BUTTON_CLASS} !bg-limoni-btn-bg !text-limoni-btn-text !border-none !py-1.5 !px-3 !leading-4 !text-sm !font-normal !cursor-pointer !transition-all !duration-200 !inline-flex !items-center !gap-1 !rounded-l-full hover:!underline active:!translate-y-0 disabled:!opacity-60 disabled:!cursor-not-allowed disabled:!transform-none`;
-    addButton.innerHTML = `<svg class="inline-block! align-middle!" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14m-7-7h14"/></svg><span>ekle</span>`;
+    addButton.className = `${ADD_BUTTON_CLASS} !bg-limoni-btn-bg !text-limoni-btn-text !border-none !py-1.5 !px-2 !leading-4 !text-sm !font-normal !cursor-pointer !transition-all !duration-200 !inline-flex !items-center !gap-1 !rounded-l-full hover:!underline active:!translate-y-0 disabled:!cursor-not-allowed disabled:!transform-none !opacity-100`;
+    addButton.innerHTML = `<svg class="inline-block! align-middle!" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>`;
     addButton.title = "Varsayılan koleksiyona ekle";
 
     const dropdownButton = document.createElement("button");
-    dropdownButton.className = `${DROPDOWN_BUTTON_CLASS} !bg-limoni-btn-bg !text-limoni-btn-text !border-none !py-1.5 !px-2 !leading-4 !text-sm !font-normal !cursor-pointer !transition-all !duration-200 !inline-flex !items-center !gap-1 !rounded-r-full active:!translate-y-0 disabled:!opacity-60 disabled:!cursor-not-allowed disabled:!transform-none`;
-    dropdownButton.innerHTML = `<svg class="inline-block! align-middle!" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`;
+    dropdownButton.className = `${DROPDOWN_BUTTON_CLASS} !bg-limoni-btn-bg !text-limoni-btn-text !border-none !py-1.5 !px-2 !leading-4 !text-sm !font-normal !cursor-pointer !transition-all !duration-200 !inline-flex !items-center !gap-1 !rounded-r-full active:!translate-y-0 disabled:!cursor-not-allowed disabled:!transform-none`;
+    dropdownButton.innerHTML = `<svg class="inline-block! align-middle!" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>`;
     dropdownButton.title = "Koleksiyon seç";
-
     const dropdownMenu = document.createElement("div");
     dropdownMenu.className = `${DROPDOWN_MENU_CLASS} !absolute !top-full !right-0 !mt-1 !bg-white !border !border-limoni-dropdown-border !rounded !min-w-[180px] !max-w-[250px] !max-h-[300px] !overflow-y-auto !z-[9999]`;
     dropdownMenu.style.display = "none";
@@ -179,7 +178,7 @@ async function addToCollection(
   try {
     button.disabled = true;
     const originalHTML = button.innerHTML;
-    button.innerHTML = `<svg class="inline-block! align-middle!" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><span>Ekleniyor...</span>`;
+    button.innerHTML = `<svg class="spin" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-circle-icon lucide-loader-circle"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`;
 
     const entryElement = parser.findEntryElement(entryId);
     if (!entryElement) {
@@ -204,7 +203,7 @@ async function addToCollection(
       entry,
     });
 
-    button.innerHTML = `<svg class="inline-block! align-middle!" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>eklendi</span>`;
+    button.innerHTML = `<svg class="inline-block! align-middle!" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-icon lucide-check"><path d="M20 6 9 17l-5-5"/></svg>`;
     button.classList.add("!bg-limoni-success");
     button.classList.add("!text-white");
 
@@ -217,10 +216,14 @@ async function addToCollection(
   } catch (error) {
     console.error("Error adding entry:", error);
     button.disabled = false;
-    button.innerHTML = `<svg class="inline-block! align-middle!" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg><span>Hata</span>`;
+    button.innerHTML = `<svg class="inline-block! align-middle!" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x-icon lucide-circle-x"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>`;
+    button.classList.add("!bg-limoni-error");
+    button.classList.add("!text-white");
 
     setTimeout(() => {
-      button.innerHTML = `<svg class="inline-block! align-middle!" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14m-7-7h14"/></svg><span>ekle</span>`;
+      button.innerHTML = `<svg class="inline-block! align-middle!" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>`;
+      button.classList.remove("!bg-limoni-error");
+      button.classList.remove("!text-white");
     }, 2000);
   }
 }
