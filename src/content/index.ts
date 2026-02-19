@@ -234,13 +234,10 @@ async function init(): Promise<void> {
     injectAddButtons();
   });
 
-  const entryList = document.querySelector("#entry-item-list");
-  if (entryList) {
-    observer.observe(entryList, {
-      childList: true,
-      subtree: true,
-    });
-  }
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
 
   document.addEventListener("click", (e) => {
     const target = e.target as HTMLElement;
