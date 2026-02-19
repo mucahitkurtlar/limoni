@@ -4,7 +4,7 @@ node_modules
 # output
 out
 dist
-build
+packages
 *.tgz
 
 # code coverage
