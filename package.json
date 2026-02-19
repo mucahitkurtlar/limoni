@@ -1,11 +1,11 @@
 {
   "name": "limoni",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "A browser extension for archiving eksi sozluk (eksisozluk.com) data",
   "type": "module",
   "scripts": {
     "build": "bun run build.ts",
-    "package": "web-ext build -s dist -a build -n limoni-$npm_package_version.xpi -o",
+    "package": "web-ext build -s dist -a packages -n limoni-$npm_package_version.xpi -o",
     "lint": "eslint src",
     "type-check": "tsc --noEmit",
     "format": "prettier --write \"**/*.{ts,tsx,json,css,md}\"",
