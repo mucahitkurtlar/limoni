@@ -11,7 +11,8 @@ limoni, Ekşi Sözlük entry koleksiyonları oluşturmanıza ve yönetmenize ola
 
 ## Başlarken
 
-Adımları takip ederek limoni'yi geliştirme ortamınızda çalıştırabilirsiniz.
+> [!NOTE]  
+> Bu bölüm, limoni'yi geliştirme ortamında çalıştırmak isteyen geliştiriciler içindir. Sadece kullanıcı olarak limoni'yi kullanmak istiyorsanız [bu bağlantıya](https://addons.mozilla.org/tr/firefox/addon/limoni/) tıklayarak Firefox eklenti mağazasından uzantıyı yükleyebilirsiniz.
 
 ### Gereksinimler
 
@@ -61,9 +62,9 @@ bun run build
 
 ### Entry'leri Koleksiyonlara Ekleme
 
-1. Ekşi Sözlük'te herhangi bir entry'nin altında bulunan "+ ekle" butonuna tıklayarak entry'yi varsayılan koleksiyonunuza ekleyin
-2. Eğer entry'yi farklı bir koleksiyona eklemek istiyorsanız, "+ ekle" butonunun yanındaki açılır menüyü kullanarak istediğiniz koleksiyonu seçin
-3. Entry başarıyla eklendiğinde, "+ ekle" butonu "✓ eklendi" olarak değişecektir
+1. Ekşi Sözlük'te herhangi bir entry'nin altında bulunan "+" butonuna tıklayarak entry'yi varsayılan koleksiyonunuza ekleyin
+2. Eğer entry'yi farklı bir koleksiyona eklemek istiyorsanız, "+" butonunun yanındaki açılır menüyü kullanarak istediğiniz koleksiyonu seçin
+3. Entry başarıyla eklendiğinde, "+" butonu "✓" olarak değişecektir
 
 ### Koleksiyonları Dışa Aktarma
 
