@@ -1,0 +1,15 @@
+@theme {
+  --color-lm-primary: #81c14b;
+  --color-lm-primary-dark: oklch(0.7024 0.1638 133.38);
+  --color-lm-edit: #2845d6;
+  --color-lm-delete: #da3d20;
+  --color-lm-link: #53a245;
+  --color-lm-success: #81c14b;
+  --color-lm-error: #ea4335;
+
+  --color-lm-bg: #ffffff;
+  --color-lm-text: #333333;
+  --color-lm-text-muted: #888888;
+  --color-lm-border: #b0bec5;
+  --color-lm-hover: #f6f7f7;
+}

@@ -4,17 +4,19 @@ import type {
   Message,
   AddEntryPayload,
   Collection,
+  Theme,
   CollectionMessageResponse,
   SettingsMessageResponse,
 } from "../types";
 
-const ADD_BUTTON_CLASS = "limoni-add-btn";
-const DROPDOWN_BUTTON_CLASS = "limoni-dropdown-btn";
-const DROPDOWN_MENU_CLASS = "limoni-dropdown-menu";
-const BUTTON_GROUP_CLASS = "limoni-button-group";
+const ADD_BUTTON_CLASS = "lm-add-btn";
+const DROPDOWN_BUTTON_CLASS = "lm-dropdown-btn";
+const DROPDOWN_MENU_CLASS = "lm-dropdown-menu";
+const BUTTON_GROUP_CLASS = "lm-button-group";
 
 let collections: Collection[] = [];
 let defaultCollectionId: string | undefined;
+let currentTheme: Theme = "light";
 
 async function loadCollections(): Promise<void> {
   try {
@@ -38,6 +40,13 @@ async function loadCollections(): Promise<void> {
     )) as SettingsMessageResponse;
     if (settingsResponse.success) {
       defaultCollectionId = settingsResponse.settings?.defaultCollectionId;
+      const newTheme = settingsResponse.settings?.theme || "light";
+      if (newTheme !== currentTheme) {
+        currentTheme = newTheme;
+        applyThemeToInjectedElements();
+      } else {
+        currentTheme = newTheme;
+      }
     }
   } catch (error) {
     console.error("Error loading collections:", error);
@@ -67,32 +76,33 @@ function injectAddButtons(): void {
     buttonGroup.setAttribute("data-entry-id", entryId);
 
     const addButton = document.createElement("button");
-    addButton.className = `${ADD_BUTTON_CLASS} !bg-limoni-btn-bg !text-limoni-btn-text !border-none !py-1.5 !px-2 !leading-4 !text-sm !font-normal !cursor-pointer !transition-all !duration-200 !inline-flex !items-center !gap-1 !rounded-l-full hover:!underline active:!translate-y-0 disabled:!cursor-not-allowed disabled:!transform-none !opacity-100`;
+    addButton.className = `${ADD_BUTTON_CLASS} !bg-lm-btn-bg !text-lm-btn-text !border-none !py-1.5 !px-2 !leading-4 !text-sm !font-normal !cursor-pointer !transition-all !duration-200 !inline-flex !items-center !gap-1 !rounded-l-full hover:!underline active:!translate-y-0 disabled:!cursor-not-allowed disabled:!transform-none !opacity-100`;
     addButton.innerHTML = `<svg class="inline-block! align-middle!" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>`;
     addButton.title = "Varsayılan koleksiyona ekle";
 
     const dropdownButton = document.createElement("button");
-    dropdownButton.className = `${DROPDOWN_BUTTON_CLASS} !bg-limoni-btn-bg !text-limoni-btn-text !border-none !py-1.5 !px-2 !leading-4 !text-sm !font-normal !cursor-pointer !transition-all !duration-200 !inline-flex !items-center !gap-1 !rounded-r-full active:!translate-y-0 disabled:!cursor-not-allowed disabled:!transform-none`;
+    dropdownButton.className = `${DROPDOWN_BUTTON_CLASS} !bg-lm-btn-bg !text-lm-btn-text !border-none !py-1.5 !px-2 !leading-4 !text-sm !font-normal !cursor-pointer !transition-all !duration-200 !inline-flex !items-center !gap-1 !rounded-r-full active:!translate-y-0 disabled:!cursor-not-allowed disabled:!transform-none`;
     dropdownButton.innerHTML = `<svg class="inline-block! align-middle!" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>`;
     dropdownButton.title = "Koleksiyon seç";
     const dropdownMenu = document.createElement("div");
-    dropdownMenu.className = `${DROPDOWN_MENU_CLASS} !absolute !top-full !right-0 !mt-1 !bg-white !border !border-limoni-dropdown-border !rounded !min-w-[180px] !max-w-[250px] !max-h-[300px] !overflow-y-auto !z-[9999]`;
+    dropdownMenu.className = `${DROPDOWN_MENU_CLASS} !absolute !top-full !right-0 !mt-1 !bg-lm-dropdown-bg !border !border-lm-dropdown-border !rounded !min-w-[180px] !max-w-[250px] !max-h-[300px] !overflow-y-auto !z-[9999]`;
     dropdownMenu.style.display = "none";
 
     if (collections.length === 0) {
       const emptyItem = document.createElement("div");
-      emptyItem.className = "!p-3 !text-center !text-[#999] !text-xs !italic";
+      emptyItem.className =
+        "!p-3 !text-center !text-lm-dropdown-muted !text-xs !italic";
       emptyItem.textContent = "Koleksiyon yok";
       dropdownMenu.appendChild(emptyItem);
     } else {
       collections.forEach((collection) => {
         const item = document.createElement("button");
         item.className =
-          "!flex !items-center !gap-1.5 !w-full !py-2 !px-3 !border-none !bg-transparent !text-limoni-dropdown-item !text-left !text-sm !cursor-pointer !transition-colors !duration-150 hover:!bg-limoni-dropdown-hover !font-['-apple-system',BlinkMacSystemFont,'Segoe_UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif]";
+          "!flex !items-center !gap-1.5 !w-full !py-2 !px-3 !border-none !bg-transparent !text-lm-dropdown-item !text-left !text-sm !cursor-pointer !transition-colors !duration-150 hover:!bg-lm-dropdown-hover !font-['-apple-system',BlinkMacSystemFont,'Segoe_UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif]";
         item.textContent = collection.name;
         item.setAttribute("data-collection-id", collection.id);
         if (collection.id === defaultCollectionId) {
-          item.classList.add("!text-limoni-default");
+          item.classList.add("!text-lm-primary");
           item.innerHTML = `<svg class="shrink-0!" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><span>${collection.name}</span>`;
         }
 
@@ -132,7 +142,8 @@ function injectAddButtons(): void {
     buttonGroup.appendChild(dropdownMenu);
 
     const container = document.createElement("div");
-    container.className = "limoni-button-container !ml-2.5 !float-left";
+    container.className = "lm-button-container !ml-2.5 !float-left";
+    container.setAttribute("data-lm-theme", currentTheme);
     container.appendChild(buttonGroup);
 
     const insertButton = () => {
@@ -141,11 +152,11 @@ function injectAddButtons(): void {
       if (
         favoriteLinks &&
         !favoriteLinks.nextElementSibling?.classList.contains(
-          "limoni-button-container"
+          "lm-button-container"
         )
       ) {
         favoriteLinks.insertAdjacentElement("afterend", container);
-      } else if (!feedbackContainer.querySelector(".limoni-button-container")) {
+      } else if (!feedbackContainer.querySelector(".lm-button-container")) {
         feedbackContainer.appendChild(container);
       }
     };
@@ -204,28 +215,34 @@ async function addToCollection(
     });
 
     button.innerHTML = `<svg class="inline-block! align-middle!" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-icon lucide-check"><path d="M20 6 9 17l-5-5"/></svg>`;
-    button.classList.add("!bg-limoni-success");
+    button.classList.add("!bg-lm-success");
     button.classList.add("!text-white");
 
     setTimeout(() => {
       button.disabled = false;
       button.innerHTML = originalHTML;
-      button.classList.remove("!bg-limoni-success");
+      button.classList.remove("!bg-lm-success");
       button.classList.remove("!text-white");
     }, 2000);
   } catch (error) {
     console.error("Error adding entry:", error);
     button.disabled = false;
     button.innerHTML = `<svg class="inline-block! align-middle!" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x-icon lucide-circle-x"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>`;
-    button.classList.add("!bg-limoni-error");
+    button.classList.add("!bg-lm-error");
     button.classList.add("!text-white");
 
     setTimeout(() => {
       button.innerHTML = `<svg class="inline-block! align-middle!" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>`;
-      button.classList.remove("!bg-limoni-error");
+      button.classList.remove("!bg-lm-error");
       button.classList.remove("!text-white");
     }, 2000);
   }
+}
+
+function applyThemeToInjectedElements(): void {
+  document.querySelectorAll(".lm-button-container").forEach((container) => {
+    container.setAttribute("data-lm-theme", currentTheme);
+  });
 }
 
 async function init(): Promise<void> {

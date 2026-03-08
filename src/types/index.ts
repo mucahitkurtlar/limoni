@@ -27,9 +27,11 @@ export interface StorageData {
   settings: Settings;
 }
 
-// TODO: Theme
+export type Theme = "light" | "dark";
+
 export interface Settings {
   defaultCollectionId?: string;
+  theme?: Theme;
 }
 
 export type MessageType =

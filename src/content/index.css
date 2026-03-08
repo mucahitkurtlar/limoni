@@ -1,16 +1,25 @@
 @import "tailwindcss";
+@import "../theme.css";
 
 @theme {
-  --color-limoni-btn-bg: #f5f5f5;
-  --color-limoni-btn-text: #333333;
-  --color-limoni-btn-hover: #424242;
-  --color-limoni-success: #81c14b;
-  --color-limoni-error: #ea4335;
-  --color-limoni-dropdown-bg: #2d2d2d;
-  --color-limoni-dropdown-border: #b0bec5;
-  --color-limoni-dropdown-item: #333333;
-  --color-limoni-dropdown-hover: #f6f7f7;
-  --color-limoni-default: #81c14b;
+  --color-lm-btn-bg: #f5f5f5;
+  --color-lm-btn-text: #333333;
+  --color-lm-btn-hover: #424242;
+  --color-lm-dropdown-bg: #ffffff;
+  --color-lm-dropdown-border: #b0bec5;
+  --color-lm-dropdown-item: #333333;
+  --color-lm-dropdown-hover: #f6f7f7;
+  --color-lm-dropdown-muted: #999999;
+}
+
+[data-lm-theme="dark"] {
+  --color-lm-btn-bg: #424242;
+  --color-lm-btn-text: #bdbdbd;
+  --color-lm-dropdown-bg: #2d2d2d;
+  --color-lm-dropdown-border: #494949;
+  --color-lm-dropdown-item: #e2e8f0;
+  --color-lm-dropdown-hover: #334155;
+  --color-lm-dropdown-muted: #94a3b8;
 }
 
 .spin {
