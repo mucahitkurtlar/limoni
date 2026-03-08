@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "firefox",
+      "request": "launch",
+      "name": "Launch Firefox with limoni",
+      "addonPath": "${workspaceFolder}/dist",
+      "url": "https://eksisozluk.com",
+      "reAttach": true,
+      "preLaunchTask": "build"
+    }
+  ]
+}
