@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "../theme.css";
 
 body {
   margin: 0;
@@ -27,6 +28,24 @@ body {
   background: #555;
 }
 
+.dark ::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  color-scheme: dark;
+}
+
 .line-clamp-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -40,10 +59,37 @@ button {
 }
 
 @theme {
-  --color-limoni-primary: oklch(0.743 0.1642 133.08);
-  --color-limoni-primary-dark: oklch(0.7024 0.1638 133.38);
-  --color-limoni-border: oklch(0.7928 0.0184 229.07);
-  --color-limoni-border-dark: oklch(0.2393 0 0);
-  --color-limoni-white-hover: oklch(0.9754 0.0011 197.14);
-  --color-limoni-black: oklch(0.3211 0 0);
+  --color-lm-input-bg: #ffffff;
+  --color-lm-input-text: #333333;
+  --color-lm-input-border: #81c14b;
+
+  --color-lm-btn-bg: #81c14b;
+  --color-lm-btn-text: #ffffff;
+  --color-lm-btn-border: #53a245;
+  --color-lm-btn-hover-bg: #68a138;
+  --color-lm-btn-hover-border: #3d7733;
+
+  --color-lm-cancel-bg: #e5e7eb;
+  --color-lm-cancel-hover: #d1d5db;
+  --color-lm-badge-bg: #fef9c3;
+  --color-lm-badge-text: #854d0e;
+}
+
+.dark {
+  --color-lm-bg: #2d2d2d;
+  --color-lm-text: #bdbdbd;
+  --color-lm-text-muted: #666666;
+  --color-lm-border: #494949;
+
+  --color-lm-btn-bg: #81c14b;
+  --color-lm-btn-text: #e0e0e0;
+  --color-lm-btn-border: #5c8e31;
+  --color-lm-btn-hover-bg: #68a138;
+  --color-lm-btn-hover-border: #3e6121;
+
+  --color-lm-hover: #1f1f1f;
+  --color-lm-cancel-bg: #334155;
+  --color-lm-cancel-hover: #475569;
+  --color-lm-badge-bg: #eab30826;
+  --color-lm-badge-text: #fde047;
 }

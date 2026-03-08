@@ -17,6 +17,8 @@ import {
   Download,
   ChevronDown,
   Edit,
+  Moon,
+  Sun,
 } from "lucide-react";
 import type {
   Collection,
@@ -24,6 +26,7 @@ import type {
   CreateCollectionPayload,
   UpdateCollectionPayload,
   ExportFormat,
+  Theme,
   Settings as SettingsType,
   CollectionMessageResponse,
   SettingsMessageResponse,
@@ -45,6 +48,9 @@ export function App() {
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState<SettingsType | null>(null);
   const [showExportMenu, setShowExportMenu] = useState(false);
+  const [theme, setTheme] = useState<Theme>(() => {
+    return (localStorage.getItem("limoni-theme") as Theme) || "light";
+  });
 
   const loadCollections = useCallback(async () => {
     try {
@@ -89,6 +95,32 @@ export function App() {
     loadCollections();
     loadSettings();
   }, [loadCollections, loadSettings]);
+
+  useEffect(() => {
+    if (settings?.theme && settings.theme !== theme) {
+      setTheme(settings.theme);
+    }
+  }, [settings?.theme]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    localStorage.setItem("limoni-theme", theme);
+  }, [theme]);
+
+  const toggleTheme = async () => {
+    const newTheme: Theme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+
+    try {
+      const message: Message = {
+        type: "UPDATE_SETTINGS",
+        payload: { theme: newTheme },
+      };
+      await browser.runtime.sendMessage(message);
+    } catch (error) {
+      console.error("Error saving theme:", error);
+    }
+  };
 
   const handleCreateCollection = async () => {
     if (!newCollectionName.trim()) {
@@ -253,23 +285,34 @@ export function App() {
 
   if (loading) {
     return (
-      <div className="w-150 h-125 flex items-center justify-center bg-gray-50">
-        <Loader2 className="w-8 h-8 text-limoni-primary animate-spin" />
+      <div className="w-150 h-125 flex items-center justify-center bg-lm-bg">
+        <Loader2 className="w-8 h-8 text-lm-primary animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="w-150 h-125 flex flex-col bg-limonibackground">
+    <div className="w-150 h-125 flex flex-col bg-lm-bg">
       {/* Header */}
-      <header className="text-white p-4 border-b border-limoni-border">
-        <div className="flex items-center gap-2">
+      <header className="p-4 border-b border-lm-border">
+        <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl text-limoni-primary font-bold">limoni</h1>
-            <p className="text-sm text-limoni-black">
+            <h1 className="text-xl text-lm-primary font-bold">limoni</h1>
+            <p className="text-sm text-lm-text">
               Ekşi Sözlük entry koleksiyonları
             </p>
           </div>
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-lg hover:bg-lm-hover transition text-lm-text-muted"
+            title={theme === "dark" ? "Açık temaya geç" : "Koyu temaya geç"}
+          >
+            {theme === "dark" ? (
+              <Sun className="w-5 h-5" />
+            ) : (
+              <Moon className="w-5 h-5" />
+            )}
+          </button>
         </div>
       </header>
 
@@ -279,7 +322,7 @@ export function App() {
           <div className="p-3">
             <button
               onClick={() => setIsCreating(true)}
-              className="w-full bg-limoni-primary border-limoni-primary-dark text-white px-3 py-2 rounded-sm text-sm font-medium hover:bg-opacity-90 transition flex items-center justify-center gap-2"
+              className="w-full bg-lm-btn-bg border border-lm-btn-border text-lm-btn-text px-3 py-2 rounded-sm text-sm font-medium hover:bg-lm-btn-hover-bg hover:border-lm-btn-hover-border transition flex items-center justify-center gap-2"
             >
               <FolderPlus className="w-4 h-4" />
               Yeni
@@ -291,19 +334,19 @@ export function App() {
               <div key={collection.id} className="relative group">
                 <button
                   onClick={() => setSelectedCollection(collection)}
-                  className={`w-full text-left text-limoni-black px-3 py-2 rounded-sm mb-1 transition ${
+                  className={`w-full text-left text-lm-text border px-3 py-2 rounded-sm mb-1 transition ${
                     selectedCollection?.id === collection.id
-                      ? "bg-limoni-primary text-white"
-                      : "hover:bg-limoni-white-hover text-limoni-black"
+                      ? "border-lm-btn-border text-lm-btn-text"
+                      : "border-lm-bg hover:bg-lm-hover text-lm-text"
                   }`}
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 ">
                     <Folder className="w-4 h-4 shrink-0" />
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium truncate">
+                      <div className="text-sm text-lm-text font-medium truncate">
                         {collection.name}
                       </div>
-                      <div className="text-xs opacity-75">
+                      <div className="text-xs text-lm-text-muted">
                         {collection.entries.length} entry
                       </div>
                     </div>
@@ -321,8 +364,8 @@ export function App() {
             ))}
 
             {collections.length === 0 && (
-              <div className="text-center text-gray-500 text-sm p-4">
-                <Folder className="w-8 h-8 mx-auto mb-2 opacity-50" />
+              <div className="text-center text-lm-text-muted text-sm p-4">
+                <Folder className="w-8 h-8 mx-auto mb-2 text-lm-text-muted" />
                 <p>Henüz koleksiyonun yok</p>
               </div>
             )}
@@ -333,32 +376,32 @@ export function App() {
         <main className="flex-1 overflow-y-auto">
           {isEditing ? (
             <div className="p-6">
-              <h2 className="text-lg font-bold text-limoni-black mb-4 flex items-center gap-2">
+              <h2 className="text-lg font-bold text-lm-text mb-4 flex items-center gap-2">
                 <Edit className="w-5 h-5" />
                 Koleksiyonu Düzenle
               </h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-lm-text mb-1">
                     Koleksiyon adı*
                   </label>
                   <input
                     type="text"
                     value={editCollectionName}
                     onChange={(e) => setEditCollectionName(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-limoni-primary"
+                    className="w-full px-3 py-2 border border-lm-input-border rounded-md bg-lm-input-bg text-lm-input-text focus:outline-none focus:ring-1 focus:ring-lm-primary"
                     placeholder="Örn: Favori Entry'lerim"
                     autoFocus
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-lm-text mb-1">
                     Açıklama
                   </label>
                   <textarea
                     value={editCollectionDesc}
                     onChange={(e) => setEditCollectionDesc(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-limoni-primary"
+                    className="w-full px-3 py-2 border border-lm-input-border rounded-md bg-lm-input-bg text-lm-input-text focus:outline-none focus:ring-1 focus:ring-lm-primary"
                     rows={3}
                     placeholder="Koleksiyon hakkında kısa açıklama..."
                   />
@@ -367,7 +410,7 @@ export function App() {
                   <button
                     onClick={handleUpdateCollection}
                     disabled={!editCollectionName.trim()}
-                    className="flex-1 bg-limoni-primary text-white px-4 py-2 rounded-sm text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                    className="flex-1 px-4 py-2 bg-lm-btn-bg border border-lm-btn-border text-lm-btn-text rounded-sm text-sm font-medium hover:bg-lm-btn-hover-bg hover:border-lm-btn-hover-border disabled:opacity-50 disabled:cursor-not-allowed transition"
                   >
                     Güncelle
                   </button>
@@ -377,7 +420,7 @@ export function App() {
                       setEditCollectionName("");
                       setEditCollectionDesc("");
                     }}
-                    className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-sm text-sm font-medium hover:bg-gray-300 transition"
+                    className="flex-1 bg-lm-cancel-bg text-lm-text px-4 py-2 rounded-sm text-sm font-medium hover:bg-lm-cancel-hover transition"
                   >
                     İptal
                   </button>
@@ -386,32 +429,32 @@ export function App() {
             </div>
           ) : isCreating ? (
             <div className="p-6">
-              <h2 className="text-lg font-bold text-limoni-black mb-4 flex items-center gap-2">
+              <h2 className="text-lg font-bold text-lm-text mb-4 flex items-center gap-2">
                 <FolderPlus className="w-5 h-5" />
                 Yeni Koleksiyon
               </h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-lm-text mb-1">
                     Koleksiyon adı*
                   </label>
                   <input
                     type="text"
                     value={newCollectionName}
                     onChange={(e) => setNewCollectionName(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-limoni-primary"
+                    className="w-full px-3 py-2 border border-lm-input-border rounded-md bg-lm-input-bg text-lm-input-text focus:outline-none focus:ring-1 focus:ring-lm-primary"
                     placeholder="Örn: Favori Entry'lerim"
                     autoFocus
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-lm-text mb-1">
                     Açıklama
                   </label>
                   <textarea
                     value={newCollectionDesc}
                     onChange={(e) => setNewCollectionDesc(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-limoni-primary"
+                    className="w-full px-3 py-2 border border-lm-input-border rounded-md bg-lm-input-bg text-lm-input-text focus:outline-none focus:ring-1 focus:ring-lm-primary"
                     rows={3}
                     placeholder="Koleksiyon hakkında kısa açıklama..."
                   />
@@ -420,7 +463,7 @@ export function App() {
                   <button
                     onClick={handleCreateCollection}
                     disabled={!newCollectionName.trim()}
-                    className="flex-1 bg-limoni-primary text-white px-4 py-2 rounded-sm text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                    className="flex-1 px-4 py-2 bg-lm-btn-bg border border-lm-btn-border text-lm-btn-text rounded-sm text-sm font-medium hover:bg-lm-btn-hover-bg hover:border-lm-btn-hover-border disabled:opacity-50 disabled:cursor-not-allowed transition"
                   >
                     Oluştur
                   </button>
@@ -430,7 +473,7 @@ export function App() {
                       setNewCollectionName("");
                       setNewCollectionDesc("");
                     }}
-                    className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-sm text-sm font-medium hover:bg-gray-300 transition"
+                    className="flex-1 bg-lm-cancel-bg text-lm-text px-4 py-2 rounded-sm text-sm font-medium hover:bg-lm-cancel-hover transition"
                   >
                     İptal
                   </button>
@@ -443,18 +486,18 @@ export function App() {
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h2 className="text-xl font-bold text-gray-800">
+                      <h2 className="text-xl font-bold text-lm-text">
                         {selectedCollection.name}
                       </h2>
                       {settings?.defaultCollectionId ===
                         selectedCollection.id && (
-                        <span className="text-xs px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full">
+                        <span className="text-xs px-2 py-1 bg-lm-badge-bg text-lm-badge-text rounded-full">
                           Varsayılan
                         </span>
                       )}
                     </div>
                     {selectedCollection.description && (
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-lm-text-muted">
                         {selectedCollection.description}
                       </p>
                     )}
@@ -481,7 +524,7 @@ export function App() {
                         );
                         setIsEditing(true);
                       }}
-                      className="text-blue-600 hover:text-blue-800 p-1"
+                      className="text-lm-edit hover:bg-lm-hover p-1"
                       title="Koleksiyonu düzenle"
                     >
                       <Edit className="w-4 h-4" />
@@ -490,7 +533,7 @@ export function App() {
                       onClick={() =>
                         handleDeleteCollection(selectedCollection.id)
                       }
-                      className="text-red-600 hover:text-red-800 p-1"
+                      className="text-lm-delete hover:bg-lm-hover p-1"
                       title="Koleksiyonu sil"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -502,20 +545,20 @@ export function App() {
                 <div className="relative mb-4">
                   <button
                     onClick={() => setShowExportMenu(!showExportMenu)}
-                    className="px-3 py-1.5 bg-limoni-primary text-white rounded text-xs hover:bg-limoni-primary-dark transition flex items-center gap-2"
+                    className="px-3 py-1.5 rounded bg-lm-btn-bg border border-lm-btn-border text-lm-btn-text hover:bg-lm-btn-hover-bg hover:border-lm-btn-hover-border text-xs transition flex items-center gap-2"
                   >
                     <Download className="w-3 h-3" />
                     Dışa Aktar
                     <ChevronDown className="w-3 h-3" />
                   </button>
                   {showExportMenu && (
-                    <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded shadow-lg z-10 min-w-30">
+                    <div className="absolute top-full left-0 mt-1 bg-lm-bg border border-lm-border rounded shadow-lg z-10 min-w-30">
                       <button
                         onClick={() => {
                           handleExport("html");
                           setShowExportMenu(false);
                         }}
-                        className="w-full px-3 py-2 text-left text-xs hover:bg-limoni-white-hover transition flex items-center gap-2"
+                        className="w-full px-3 py-2 text-left text-xs text-lm-text hover:bg-lm-hover transition flex items-center gap-2"
                       >
                         <FileText className="w-3 h-3" />
                         HTML
@@ -525,7 +568,7 @@ export function App() {
                           handleExport("csv");
                           setShowExportMenu(false);
                         }}
-                        className="w-full px-3 py-2 text-left text-xs hover:bg-limoni-white-hover transition flex items-center gap-2"
+                        className="w-full px-3 py-2 text-left text-xs text-lm-text hover:bg-lm-hover transition flex items-center gap-2"
                       >
                         <FileSpreadsheet className="w-3 h-3" />
                         CSV
@@ -535,7 +578,7 @@ export function App() {
                           handleExport("json");
                           setShowExportMenu(false);
                         }}
-                        className="w-full px-3 py-2 text-left text-xs hover:bg-limoni-white-hover transition flex items-center gap-2"
+                        className="w-full px-3 py-2 text-left text-xs text-lm-text hover:bg-lm-hover transition flex items-center gap-2"
                       >
                         <FileJson className="w-3 h-3" />
                         JSON
@@ -544,9 +587,9 @@ export function App() {
                   )}
                 </div>
 
-                <div className="text-sm text-gray-600 flex items-center gap-4">
+                <div className="text-sm text-lm-text-muted flex items-center gap-4">
                   <span>{selectedCollection.entries.length} entry</span>
-                  <span>•</span>
+                  <span>-</span>
                   <span>
                     {new Date(selectedCollection.createdAt).toLocaleDateString(
                       "tr-TR"
@@ -558,7 +601,7 @@ export function App() {
               {/* Entries List */}
               <div className="space-y-3">
                 {selectedCollection.entries.length === 0 ? (
-                  <div className="text-center text-gray-500 py-12">
+                  <div className="text-center text-lm-text-muted py-12">
                     <FolderOpen className="w-16 h-16 mx-auto mb-4 opacity-30" />
                     <p className="font-medium">
                       Bu koleksiyonda henüz entry yok
@@ -573,13 +616,13 @@ export function App() {
                   selectedCollection.entries.map((entry) => (
                     <div
                       key={entry.id}
-                      className="bg-white p-4 rounded-lg border border-gray-200 hover:shadow-md transition"
+                      className="bg-lm-bg p-4 rounded-lg border border-lm-border hover:shadow-md transition"
                     >
                       {/* Header - Topic Title */}
                       {entry.topicTitle && (
                         <div className="flex items-center justify-between mb-3">
                           <a
-                            className="flex items-center gap-1 text-sm font-medium text-limoni-black hover:underline"
+                            className="flex items-center gap-1 text-sm font-medium text-lm-text hover:underline"
                             href={entry.topicUrl}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -590,7 +633,7 @@ export function App() {
                             onClick={() =>
                               handleDeleteEntry(selectedCollection.id, entry.id)
                             }
-                            className="text-red-600 hover:text-red-800 p-1"
+                            className="text-lm-delete hover:bg-lm-hover p-1"
                             title="Entry'yi sil"
                           >
                             <X className="w-4 h-4" />
@@ -600,18 +643,18 @@ export function App() {
 
                       {/* Entry Content */}
                       <div
-                        className="text-sm text-limoni-black mb-3 leading-relaxed"
+                        className="text-sm text-lm-text mb-3 leading-relaxed"
                         dangerouslySetInnerHTML={{
                           __html: DOMPurify.sanitize(entry.contentHtml),
                         }}
                       />
 
                       {/* Footer */}
-                      <div className="flex items-center justify-between text-xs border-t border-limoni-border pt-3">
+                      <div className="flex items-center justify-between text-xs border-t border-lm-border pt-3">
                         {/* Left - Favorites */}
                         <div className="flex items-center gap-3">
-                          <span className="flex items-center gap-1 text-limoni-black">
-                            <Droplet className="w-3 h-3" />
+                          <span className="flex items-center gap-1 text-lm-text">
+                            <Droplet className="w-3 h-3 text-lm-text" />
                             {entry.favoriteCount}
                           </span>
                           {entry.topicUrl && (
@@ -619,7 +662,7 @@ export function App() {
                               href={"https://eksisozluk.com/entry/" + entry.id}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-limoni-primary hover:underline hover:text-limoni-primary-dark transition flex items-center gap-1"
+                              className="text-lm-link hover:underline transition flex items-center gap-1"
                             >
                               Ekşi&apos;de görüntüle
                               <ExternalLink className="w-3 h-3" />
@@ -636,11 +679,11 @@ export function App() {
                               }
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-limoni-primary hover:underline hover:text-limoni-primary-dark transition font-medium leading-tight"
+                              className="text-lm-link hover:underline transition font-medium"
                             >
                               {entry.author}
                             </a>
-                            <span className="text-limoni-black opacity-70">
+                            <span className="text-lm-text-muted">
                               {entry.date}
                             </span>
                           </div>
@@ -662,7 +705,7 @@ export function App() {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-full text-gray-500">
+            <div className="flex flex-col items-center justify-center h-full text-lm-text-muted">
               <FolderOpen className="w-20 h-20 mb-4 opacity-30" />
               <p className="font-medium">Bir koleksiyon seçin</p>
               <p className="text-sm">veya yeni koleksiyon oluşturun</p>
